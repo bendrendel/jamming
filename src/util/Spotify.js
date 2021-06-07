@@ -1,5 +1,5 @@
 const clientId = '7a087f4c357e4333942112e6e9533266';
-const redirectUri = 'http://localhost:3000/';
+const redirectUri = 'https://benjamming.surge.sh/';
 let savedAccessToken;
 
 let Spotify = {
