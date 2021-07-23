@@ -1,5 +1,7 @@
 const clientId = '7a087f4c357e4333942112e6e9533266';
-const redirectUri = 'https://benjamming.surge.sh/';
+const prodRedirectUri = 'https://benjamming.surge.sh/';
+const devRedirectUri = 'http://localhost:3000/';
+let redirectUri = process.env.NODE_ENV === 'development' ? devRedirectUri : prodRedirectUri;
 let savedAccessToken;
 
 let Spotify = {
