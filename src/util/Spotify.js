@@ -5,17 +5,32 @@ let redirectUri = process.env.NODE_ENV === 'development' ? devRedirectUri : prod
 let savedAccessToken;
 
 let Spotify = {
+    getOAuthParams() {
+        let accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
+        let expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
+
+        if (accessTokenMatch && expiresInMatch) {
+            let oAuthParams = {
+                accessToken: accessTokenMatch[1],
+                expiresIn: Number(expiresInMatch[1])
+            };
+
+            return oAuthParams;
+        } else {
+            return false;
+        }
+    },
+
     getAccessToken() {
         if (savedAccessToken) {
             return savedAccessToken;
         }
 
-        let possibleAccessToken = window.location.href.match(/access_token=([^&]*)/);
-        let possibleExpiresIn = window.location.href.match(/expires_in=([^&]*)/);
+        let oAuthParams = Spotify.getOAuthParams();
 
-        if (possibleAccessToken && possibleExpiresIn) {
-            savedAccessToken = possibleAccessToken[1];
-            let expiresIn = Number(possibleExpiresIn[1]);
+        if (oAuthParams) {
+            savedAccessToken = oAuthParams.accessToken;
+            let expiresIn = oAuthParams.expiresIn;
 
             setTimeout(() => savedAccessToken = '', expiresIn * 1000);
 
